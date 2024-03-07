@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Tl1cYGJsyDXjqsJ6PuhmBkSKr/4+QJDz0C+pJeMluNLPDscVVYRl67IHvJ7cfkJibtxe2NLwiVB+4CqLuoOxTw==",
+  "success": true,
+  "projectFilePath": "D:\\petPrjkt\\MagicTable\\MagicTable.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\kolya\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

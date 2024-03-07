@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "Table";
+}
+
+<div>
+    <h1 style="padding:20px;">Project Statistics</h1>
+
+    <label for="timeRange" style="padding: 20px">Time range:</label>
+
+    <select name="rr" id="timeRange" >
+        <option value="lw">LastWeek</option>
+        <option value="wb">WeekBefore</option>        
+    </select>
+
+</div>
+
+<div id="secDiv"  >
+
+</div>
+
+
+
+<script>
+    var p = document.getElementById("secDiv");
+    p.onload = BuildTable();
+
+    var dd = document.getElementById("timeRange");
+    dd.addEventListener("change", BuildTable);
+
+    async function BuildTable() {
+        let response = await fetch('/api/Table/TotalChats');
+        let message = await response.text();
+        let totalChats = JSON.parse(message);
+
+        let response2 = await fetch('/api/Table/Duration');
+        let message2 = await response2.text();
+        let duration = JSON.parse(message2);
+
+        let response3 = await fetch('/api/Table/Ratings');
+        let message3 = await response3.text();
+        let rating = JSON.parse(message3);
+
+        let response4 = await fetch('/api/Table/ResponseTime');
+        let message4 = await response4.text();
+        let responseTime = JSON.parse(message4);
+
+        let response5 = await fetch('/api/Table/Tags');
+        let message5 = await response5.text();
+        let tags = JSON.parse(message5);
+
+        var dates = Array();
+        
+        for (let item in totalChats['records']){
+            dates.push(`${item}`);
+        }
+
+        var revDates = dates.reverse();
+
+        var ddlist = document.getElementById("timeRange").value;
+        var reversDates;
+        if (ddlist == 'lw') {
+            reversDates = revDates.splice(0, 7);
+        }
+        else {
+            reversDates = revDates.splice(7, 13);
+        }
+        
+
+        var textHTML = `<table class="table"><thead>
+                                 <tr>
+                                     <th>&nbsp;</th>
+                                     <th>Глобальные чаты</th>
+                                     <th colspan="3">Длительность использования</th>
+                                     <th colspan="2">Оценка ползователей</th>
+                                     <th></th>
+                                     <th></th>
+                                 <tr/>
+                              <tr>
+                                 <th>Дата</th>
+                                 <th>Количество чатов</th>
+                                 <th>Количество пользователей</th>
+                                 <th>Количество чатов</th>
+                                 <th>Продолжитель использования</th>
+                                 <th>Положительные</th>
+                                 <th>Менее положительные</th>
+                                 <th>Время задержки</th>
+                                 <th>Последние теги</th>
+                              </tr></thead> <tbody>`;
+
+
+        for (let itm of reversDates) {
+            textHTML += `
+            <tr>
+            <td>${itm}</td>
+            <td>${totalChats['records'][itm]['total']}</td>
+            <td>${duration['records'][itm]['agents_chatting_duration']}</td>
+            <td>${duration['records'][itm]['count']}</td>
+            <td>${duration['records'][itm]['duration']}</td>
+            <td>${rating['records'][itm]['good']}</td>
+            <td>${rating['records'][itm]['bad']}</td>
+            <td>${responseTime['records'][itm]['response_time']}</td>
+            <td>ViewMore</td></tr>`;
+            
+        }
+        textHTML += "</tbody></table>";
+        
+
+        document.getElementById("secDiv").innerHTML = textHTML.replace("undefined", '-');
+    }
+</script>
+
+<script>
+
+
+</script>
+
+    
